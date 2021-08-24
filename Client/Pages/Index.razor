@@ -2,14 +2,26 @@
 
 @inherits IndexBase
 
-<MudCard Style="background-color: rgba(89, 74, 226, 0.126); color: black; padding: 15px" Outlined="true" Elevation="3">
+@*<MudCard Style="background-color: rgba(89, 74, 226, 0.126); color: black; padding: 15px" Outlined="true" Elevation="3">*@
+<MudCard Style="background-size: cover; background-image: url(/img/bg.jpg); color: black; padding: 15px; height: 400px;" Outlined="true" Elevation="3">
     <MudCardContent>
 
-        <div style="text-align: center;">
-            <img src="/img/Logo02.png">
-        </div>
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="5" lg="5" xl="5">
+                <div class="pa-4 mt-1 rounded" style="background-color: rgba(0, 0, 0, 0.726);">
+                    <MudText Typo="Typo.h5" Class="mb-4" Style="color: #FFFFFF;">Seja Bem Vindo !</MudText>
+                    <MudText Typo="Typo.caption" Style="color: #FFFFFF;">
+                        Sistema web de geolocalização em tempo real, 
+                        com marcação ponto a ponto. Contendo previsão do
+                        tempo no local em que se encontra.
+                    </MudText>
+                </div>
+            </MudItem>
+        </MudGrid>
 
-        <MudText Typo="Typo.h5" Class="mt-4" Style="color: #546E7A;">Seja Bem Vindo !</MudText>
-        <MudText Typo="Typo.overline" Style="color: #546E7A;">Sistema web de geolocalização em tempo real. </MudText>
+        @*<div style="text-align: center;">
+            <img src="/img/Logo02.png">
+        </div>*@
+
     </MudCardContent>
 </MudCard>
