@@ -11,6 +11,9 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">BlazorGPS</MudText>
         <MudSpacer />
+        <MudLink Href="https://github.com/Polodaniel/BlazorGPS" Target="_blank">
+            <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Tertiary" Edge="Edge.End" />
+        </MudLink>
         <MudIconButton Icon="@Icons.Material.Rounded.Refresh" Color="Color.Tertiary" Edge="Edge.End" OnClick="@(UpdateSystem)" />
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="3" Style="background-color: #ECEFF1;">
@@ -65,6 +68,11 @@
                 await JS.InvokeVoidAsync("UpdateSystem");
 
 
+    }
+
+    public void OpenGitHub() 
+    {
+        
     }
 
     MudTheme PaleteColors = new MudTheme()
