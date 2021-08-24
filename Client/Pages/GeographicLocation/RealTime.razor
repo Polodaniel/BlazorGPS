@@ -1,0 +1,23 @@
+﻿@page "/RealTime"
+
+@inherits RealTimeBase
+
+<MudGrid>
+    <MudItem xs="12" sm="12" md="12" lg="9" xl="9">
+        <Maps @ref="MapsReference" />
+    </MudItem>
+    <MudItem xs="12" sm="12" md="12" lg="3" xl="3">
+        <MudPaper Width="100%" Class="py-3" Square="true" Style="background-color: #ECEFF1;">
+            <MudNavMenu>
+                <MudText Typo="Typo.h6" Class="px-4">Menu</MudText>
+                <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Menu de GeoLocalização</MudText>
+                <MudDivider Class="my-2" />
+                <MudNavLink Icon="@Icons.Material.Rounded.LocationOn" OnClick="GetGeolocation">Localização</MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Rounded.Navigation" OnClick="WatchPosition">Navegação</MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Rounded.Stop" OnClick="StopWatch">Parar Navegação</MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Rounded.LayersClear" OnClick="RemoverMarcacoes">Limpar Mapa</MudNavLink>
+                <MudNavLink Icon="@Icons.Material.Rounded.Map" OnClick="GetLayout">Layout</MudNavLink>
+            </MudNavMenu>
+        </MudPaper>
+    </MudItem>
+</MudGrid>

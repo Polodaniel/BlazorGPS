@@ -1,0 +1,24 @@
+﻿@inherits LayoutDialogBase
+
+<MudDialog Class="pa-0" DisableSidePadding="true" ClassContent="pa-0">
+    <DialogContent>
+        <EditForm Model="TypeMapsDialog">
+            <DataAnnotationsValidator />
+            <MudContainer Fixed="true" Class="m-0" Style="">
+                @if (!Equals(ListaLayout, null) && ListaLayout.Count > 0)
+                {
+                    <MudSelect T="string" @bind-Value="TypeMapsDialog" Label="Layout de Mapa" Style="width: 400px;">
+                        @foreach (var item in ListaLayout)
+                        {
+                            <MudSelectItem Value="@item.Link">@item.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                }
+            </MudContainer>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Voltar</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Selecionar</MudButton>
+    </DialogActions>
+</MudDialog>

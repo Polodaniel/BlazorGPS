@@ -1,0 +1,13 @@
+﻿@inherits LeftSideMenuBase
+
+<MudPaper Width="100%" Class="d-inline-flex py-3" Square="true" Elevation="0" Style="background-color: transparent">
+    <MudNavMenu Class="mud-width-full">
+        <MudText Typo="Typo.h6" Class="px-4">Menu</MudText>
+        <MudText Typo="Typo.caption" Class="px-4 mud-text-secondary">Versão @typeof(BlazorGPS.Client.Program).Assembly.GetName().Version</MudText>
+        <MudDivider Class="my-2" />
+        <MudNavLink Href="/" Icon="@Icons.Rounded.Home">Início</MudNavLink>
+        <MudNavGroup Title="GeoLocalização" Icon="@Icons.Rounded.LocationOn">
+            <MudNavLink Href="/RealTime" Icon="@Icons.Rounded.List">Tempo Real</MudNavLink>
+        </MudNavGroup>
+    </MudNavMenu>
+</MudPaper>
