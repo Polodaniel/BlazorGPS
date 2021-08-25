@@ -2,22 +2,143 @@
 
 @inherits RealTimeBase
 
-<MudGrid>
-    <MudItem xs="12" sm="12" md="12" lg="9" xl="9">
-        <Maps @ref="MapsReference" />
-    </MudItem>
-    <MudItem xs="12" sm="12" md="12" lg="3" xl="3">
-        <MudPaper Width="100%" Class="py-3" Square="true" Style="background-color: #ECEFF1;">
-            <MudNavMenu>
-                <MudText Typo="Typo.h6" Class="px-4">Menu</MudText>
-                <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Menu de GeoLocalização</MudText>
-                <MudDivider Class="my-2" />
-                <MudNavLink Icon="@Icons.Material.Rounded.LocationOn" OnClick="GetGeolocation">Localização</MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Rounded.Navigation" OnClick="WatchPosition">Navegação</MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Rounded.Stop" OnClick="StopWatch">Parar Navegação</MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Rounded.LayersClear" OnClick="RemoverMarcacoes">Limpar Mapa</MudNavLink>
-                <MudNavLink Icon="@Icons.Material.Rounded.Map" OnClick="GetLayout">Layout</MudNavLink>
-            </MudNavMenu>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
+<MudTabs Elevation="0" 
+         Rounded="true" 
+         ApplyEffectsToContainer="true" 
+         PanelClass="pt-2"
+         Color="@Color.Tertiary" 
+         Style="background-color: #FFFFFF;"
+         @bind-ActivePanelIndex="IndexTab">
+    <MudTabPanel Text="GPS">
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="12" lg="9" xl="9">
+                <Maps @ref="MapsReference" />
+            </MudItem>
+            <MudItem xs="12" sm="12" md="12" lg="3" xl="3">
+                <MudPaper Width="100%" Class="py-3" Square="true" Style="background-color: #ECEFF1;">
+                    <MudNavMenu>
+                        <MudText Typo="Typo.h6" Class="px-4">Menu</MudText>
+                        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Menu de GeoLocalização</MudText>
+                        <MudDivider Class="my-2" />
+                        <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.LocationOn" OnClick="GetGeolocation">Localização</MudNavLink>
+                        <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Navigation" OnClick="WatchPosition">Navegação</MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Rounded.Stop" OnClick="StopWatch">Parar Navegação</MudNavLink>
+                        <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.LayersClear" OnClick="RemoverMarcacoes">Limpar Mapa</MudNavLink>
+                        <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Map" OnClick="GetLayout">Layout</MudNavLink>
+                    </MudNavMenu>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudTabPanel>
+    <MudTabPanel Text="Histórico" BadgeData='positioHistory?.PointNavigationList.Count()'>
+
+        <MudGrid>
+            <MudItem xs="12" sm="12" md="6" lg="6" xl="6">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">Marcação Inicial</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12" sm="12" md="6" lg="6" xl="6">
+                                @if (!Equals(positioHistory.StartingPoint, null))
+                                {
+                                    <MudText Typo="Typo.body2">Latitude</MudText>
+                                    <MudText>@positioHistory.StartingPoint.Latitude</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body2">Latitude</MudText>
+                                    <MudText><MudSkeleton /></MudText>
+                                }
+                            </MudItem>
+                            <MudItem xs="12" sm="12" md="6" lg="6" xl="6">
+                                @if (!Equals(positioHistory.StartingPoint, null))
+                                {
+                                    <MudText Typo="Typo.body2">Longitude</MudText>
+                                    <MudText>@positioHistory.StartingPoint.Longitude</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body2">Longitude</MudText>
+                                    <MudText><MudSkeleton /></MudText>
+                                }
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="12" md="6" lg="6" xl="6">
+                <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">Marcação Final</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12" sm="12" md="6" lg="6" xl="6">
+                                @if (!Equals(positioHistory.EndPoint, null))
+                                {
+                                    <MudText Typo="Typo.body2">Latitude</MudText>
+                                    <MudText>@positioHistory.EndPoint.Latitude</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body2">Latitude</MudText>
+                                    <MudText><MudSkeleton /></MudText>
+                                }
+                            </MudItem>
+                            <MudItem xs="12" sm="12" md="6" lg="6" xl="6">
+                                @if (!Equals(positioHistory.StartingPoint, null))
+                                {
+                                    <MudText Typo="Typo.body2">Longitude</MudText>
+                                    <MudText>@positioHistory.EndPoint.Longitude</MudText>
+                                }
+                                else
+                                {
+                                    <MudText Typo="Typo.body2">Longitude</MudText>
+                                    <MudText><MudSkeleton /></MudText>
+                                }
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+
+        @if (!Equals(positioHistory.PointNavigationList, null) && positioHistory.PointNavigationList.Count() > 0)
+        {
+            <MudTable Items="positioHistory.PointNavigationList.OrderByDescending(x => x.Index).ToList()"
+                      Hover="true"
+                      Breakpoint="Breakpoint.Sm"
+                      Virtualize="true"
+                      Dense="true"
+                      Class="mt-2"
+                      FixedHeader="true"
+                      Height="280px;">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">Ultimas Marcações</MudText>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>Marcação</MudTh>
+                    <MudTh>Latitude</MudTh>
+                    <MudTh>Longitude</MudTh>
+                    <MudTh>Altitude</MudTh>
+                    <MudTh>Precisão</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Marcação">@context.Index</MudTd>
+                    <MudTd DataLabel="Latitude">@context.Latitude</MudTd>
+                    <MudTd DataLabel="Longitude">@context.Longitude</MudTd>
+                    <MudTd DataLabel="Altitude">@(!Equals(context.Altitude,null) ? context.Altitude : "-" )</MudTd>
+                    <MudTd DataLabel="Precisão">@context.Accuracy</MudTd>
+                    <MudTd DataLabel=""><MudIconButton Icon="@Icons.Material.Rounded.LocationOn" Size="@Size.Small" OnClick="() => ViewMapPoint(context)"></MudIconButton></MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </MudTabPanel>
+</MudTabs>
