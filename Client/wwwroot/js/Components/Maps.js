@@ -1,4 +1,5 @@
 ﻿var map;
+var baseMap;
 
 var ZoomMin;
 var ZoomMax;
@@ -6,6 +7,16 @@ var AttributionConfig;
 var TemplateConfig;
 
 var MapaInicializado = false;
+
+var CONFIG_OPTIONS = new CreateConfigOptions();
+
+function CreateConfigOptions()
+{
+    this.color = "#004647";
+    this.fillColor = "#004647";
+    this.fillOpacity = 0.2;
+    this.duration = 10000;
+}
 
 function InitializeMap(Attribution, MinZoom, MaxZoom, Template) {
 
@@ -28,18 +39,22 @@ function ConfigureMap(Attribution, MinZoom, MaxZoom, Template) {
 }
 
 function ConfigureTheMainMap(Template) {
-
-    //https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=3b495e9cd83e42f18f72300d39d88d8c
-    //https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}@2x.jpg?key=OhKLq5wlAdK90y0vDvPY
-    //http://{s}.tile.osm.org/{z}/{x}/{y}.png
-
-    L.tileLayer(TemplateConfig,
+    baseMap = L.tileLayer(TemplateConfig,
         {
             attribution: AttributionConfig,
             maxZoom: ZoomMax,
             minZoom: ZoomMin
-        }).addTo(map);
+        });
 
+    baseMap.addTo(map);
+
+    if (MapaInicializado == false) {
+        //var scale = L.control.scale()
+        //scale.addTo(map)
+    }
+
+    //Adiciona os creditos
+    //map.attributionControl.addAttribution('Daniel Polo');
 }
 
 function RemoverMarcacaoMapa() {
@@ -85,8 +100,112 @@ function Marker(latitude, longitude, altitude, accuracy) {
 
 }
 
-function Reset(Attribution, MinZoom, MaxZoom, Template)
+function Cicle(latitude, longitude, radius) {
+    L.circle([latitude, longitude], {
+        color: CONFIG_OPTIONS.color,
+        fillColor: CONFIG_OPTIONS.fillColor,
+        fillOpacity: CONFIG_OPTIONS.fillOpacity,
+        radius: radius
+    }).addTo(map);
+}
+
+// Não Funciona
+function Line(latitude, longitude) {
+    var Options = { color: CONFIG_OPTIONS.color };
+
+    var latlngs = [[latitude, longitude]];
+
+    L.polyline(latlngs, Options).addTo(map);
+}
+
+function LineMotion(latlngs)
 {
+    L.motion.polyline(latlngs, {
+        color: CONFIG_OPTIONS.color
+    }, {
+        auto: true,
+        duration: CONFIG_OPTIONS.duration,
+        easing: L.Motion.Ease.easeInOutQuart
+        //easing: L.Motion.Ease.linear
+	    //easing: L.Motion.Ease.swing
+	    //easing: L.Motion.Ease.easeInQuad
+	    //easing: L.Motion.Ease.easeOutQuad
+	    //easing: L.Motion.Ease.easeInOutQuad
+	    //easing: L.Motion.Ease.easeInCubic
+	    //easing: L.Motion.Ease.easeOutCubic
+	    //easing: L.Motion.Ease.easeInOutCubic
+	    //easing: L.Motion.Ease.easeInQuart
+	    //easing: L.Motion.Ease.easeOutQuart
+	    //easing: L.Motion.Ease.easeInQuint
+	    //easing: L.Motion.Ease.easeOutQuint
+	    //easing: L.Motion.Ease.easeInOutQuint
+	    //easing: L.Motion.Ease.easeInSine
+	    //easing: L.Motion.Ease.easeOutSine
+	    //easing: L.Motion.Ease.easeInOutSine
+	    //easing: L.Motion.Ease.easeInExpo
+	    //easing: L.Motion.Ease.easeOutExpo
+	    //easing: L.Motion.Ease.easeInOutExpo
+	    //easing: L.Motion.Ease.easeInCirc
+	    //easing: L.Motion.Ease.easeOutCirc
+	    //easing: L.Motion.Ease.easeInOutCirc
+	    //easing: L.Motion.Ease.easeInElastic
+	    //easing: L.Motion.Ease.easeOutElastic
+	    //easing: L.Motion.Ease.easeInOutElastic
+	    //easing: L.Motion.Ease.easeInBack
+	    //easing: L.Motion.Ease.easeOutBack
+	    //easing: L.Motion.Ease.easeInOutBack
+	    //easing: L.Motion.Ease.easeInBounce
+	    //easing: L.Motion.Ease.easeOutBounce
+	    //easing: L.Motion.Ease.easeInOutBounce
+    }, {
+        removeOnEnd: false, // Remove o marcador do mapa no final do movimento.
+        showMarker: false // Adicione um marcador ao mapa no primeiro ponto da linha quando o movimento acabou de ser adicionado (o início pode ser atrasado) ao mapa.
+        /*icon: L.divIcon({ html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24) })*/
+    }).addTo(map);
+}
+
+function NavigationLine(startingPoint, pointNavigationList, endPoint) {
+    Marker(startingPoint.latitude, startingPoint.longitude, startingPoint.altitude, startingPoint.accuracy);
+    Cicle(startingPoint.latitude, startingPoint.longitude, startingPoint.accuracy);
+
+    var Options = { color: CONFIG_OPTIONS.color };
+    var latlngs = [];
+
+    for (var i = 0; i < pointNavigationList.length; i++) {
+        if (pointNavigationList[i].latitude != 0 && pointNavigationList[i].longitude != 0) {
+            latlngs.push([pointNavigationList[i].latitude, pointNavigationList[i].longitude]);
+        }
+    }
+
+    L.polyline(latlngs, Options).addTo(map);
+
+    Marker(endPoint.latitude, endPoint.longitude, endPoint.altitude, endPoint.accuracy);
+    Cicle(endPoint.latitude, endPoint.longitude, endPoint.accuracy);
+}
+
+function NavigationLineMotion(startingPoint, pointNavigationList, endPoint) {
+    Marker(startingPoint.latitude, startingPoint.longitude, startingPoint.altitude, startingPoint.accuracy);
+    Cicle(startingPoint.latitude, startingPoint.longitude, startingPoint.accuracy);
+
+    var Options = { color: CONFIG_OPTIONS.color };
+    var latlngs = [];
+
+    for (var i = 0; i < pointNavigationList.length; i++) {
+        if (pointNavigationList[i].latitude != 0 && pointNavigationList[i].longitude != 0) {
+            latlngs.push([pointNavigationList[i].latitude, pointNavigationList[i].longitude]);
+        }
+    }
+
+    LineMotion(latlngs);
+    //Marker(endPoint.latitude, endPoint.longitude, endPoint.altitude, endPoint.accuracy);
+
+    setTimeout(function () {
+        Cicle(endPoint.latitude, endPoint.longitude, endPoint.accuracy);
+    }, (CONFIG_OPTIONS.duration + 500))
+
+}
+
+function Reset(Attribution, MinZoom, MaxZoom, Template) {
     MapaInicializado = false;
 
     map.remove();
@@ -143,73 +262,80 @@ function CriaMarcacaoMapa(dados, result) {
         .addTo(map);
 }
 
-function CriaMarcacaoMapa2() {
-    L.polygon([
-        [-19.98006230129525, -48.75050174688201],
-        [-19.97988123958509, -48.75434365592279],
-        [-19.9793630473937, -48.75421220552353],
-        [-19.97865956100201, -48.75435150997696],
-        [-19.97835151603908, -48.75485300430238],
-        [-19.97840973134366, -48.75523719368764],
-        [-19.97749563091907, -48.75575497765626],
-        [-19.97660641229459, -48.7561052826625],
-        [-19.97620714225813, -48.75621973235034],
-        [-19.97587182653603, -48.75610769741199],
-        [-19.97571794126815, -48.75584458160029],
-        [-19.97534333749529, -48.75583920888977],
-        [-19.97502119851406, -48.75547384423003],
-        [-19.97453498187801, -48.7553121131579],
-        [-19.97397819567833, -48.75520425799537],
-        [-19.97344338745764, -48.75527396774693],
-        [-19.97303789236807, -48.75528244403509],
-        [-19.97286663380627, -48.75510222766017],
-        [-19.97311412880019, -48.75424994890075],
-        [-19.97355105456743, -48.75265649343087],
-        [-19.97432851828836, -48.7497607455932],
-        [-19.98006230129525, -48.75050174688201]
-    ], { color: 'white' })
-        .bindPopup("<div>" +
-            "<div><strong>Fazenda:</strong> Santa Terezinha</div>" +
-            "<div><strong>Talhão:</strong> 001</div>" +
-            "<div><strong>Área:</strong> 309,45</div>" +
-            "</div>")
-        .addTo(map);
+function BASE() {
+    //// Inicializa o Mapa
+    //var map = L.map(document.getElementById('mapDIV'), {
+    //    center: [-21.13590448896191, -47.82171955322323],
+    //    zoom: 16
+    //});
 
-    L.polygon([
-        [-19.97897341617843, -48.7500842244343],
-        [-19.97845237199517, -48.74401734469281],
-        [-19.97750390982696, -48.74384710913308],
-        [-19.97550152094561, -48.74380996418343],
-        [-19.97467413205581, -48.74381343786755],
-        [-19.97453436258367, -48.74425098614498],
-        [-19.97416602830711, -48.7476071442539],
-        [-19.9743308441694, -48.74845055672814],
-        [-19.97442570392741, -48.74959122149464],
-        [-19.97897341617843, -48.7500842244343]
-    ], { color: 'white' })
-        .bindPopup("<div>" +
-            "<div><strong>Fazenda:</strong> Santa Terezinha</div>" +
-            "<div><strong>Talhão:</strong> 002</div>" +
-            "<div><strong>Área:</strong> 400,32</div>" +
-            "</div>")
-        .addTo(map);
+    //// Define o Template do Mapa e o limite de zoom
+    //L.tileLayer('https://tile.opentopomap.org/{z}/{x}/{y}.png',
+    //    {
+    //        attribution: 'Gerado por Daniel Polo',
+    //        maxZoom: 25,
+    //        minZoom: 1
+    //    }).addTo(map);
 
-    L.polygon([
-        [-19.97905865893481, -48.7500970484087],
-        [-19.97996307449961, -48.75027507472177],
-        [-19.9811020746387, -48.74983458222321],
-        [-19.98389042524932, -48.74852924713382],
-        [-19.98346366005398, -48.7445897186723],
-        [-19.98318148872516, -48.74450317239178],
-        [-19.9818524302237, -48.74477537426722],
-        [-19.97854631377889, -48.744053340756],
-        [-19.97905865893481, -48.7500970484087]
-    ], { color: 'white' })
-        .bindPopup("<div>" +
-            "<div><strong>Fazenda:</strong> Santa Terezinha</div>" +
-            "<div><strong>Talhão:</strong> 003</div>" +
-            "<div><strong>Área:</strong> 400,32</div>" +
-            "</div>")
-        .addTo(map);
+    //// Adiciona Dois Marcadores no Mapa
+    //L.marker([-21.13590448896191, -47.82171955322323],)
+    //    .bindPopup("Ínicio")
+    //    .addTo(map);
+
+    //L.marker([-21.13629939588164, -47.81877707012178])
+    //    .bindPopup("Fim")
+    //    .addTo(map);
+
+    //// Adiciona o Circulo da Acuracia
+    //var circle = L.circle([-21.13590448896191, -47.82171955322323], {
+    //    color: '#004647',
+    //    fillColor: '#004647',
+    //    fillOpacity: 0.2,
+    //    radius: 20
+    //}).addTo(map);
+
+    //// Cria Array de Latitudes e Longitudes
+    //var latlngs =
+    //    [
+    //        [-21.13590448896191, -47.82171955322323],
+    //        [-21.13588433037679, -47.82174463621919],
+    //        [-21.13577295352284, -47.82163420984481],
+    //        [-21.13564699699416, -47.82151682552775],
+    //        [-21.13555669815663, -47.82144724662309],
+    //        [-21.1354466488957, -47.8213290732669],
+    //        [-21.13534415247524, -47.82124525398298],
+    //        [-21.1352586968218, -47.8211707693709],
+    //        [-21.13519007193013, -47.8210983764512],
+    //        [-21.1351984962701, -47.82099047174022],
+    //        [-21.13528120443297, -47.82085890759308],
+    //        [-21.13539685214437, -47.82072617572972],
+    //        [-21.1354467754531, -47.82068877822255],
+    //        [-21.13552234932887, -47.82061418820467],
+    //        [-21.13563437053289, -47.82051048608597],
+    //        [-21.13583204536839, -47.82033126723757],
+    //        [-21.13593704918787, -47.82023716007804],
+    //        [-21.13614725496007, -47.82005710043645],
+    //        [-21.13623103857636, -47.81996404815489],
+    //        [-21.13631953700997, -47.81985641299217],
+    //        [-21.13639582582512, -47.81977462864032],
+    //        [-21.13649652325404, -47.8196404959869],
+    //        [-21.13671210849345, -47.81934409074034],
+    //        [-21.13678417350768, -47.81921289169527],
+    //        [-21.13682880405407, -47.8191487832221],
+    //        [-21.13684118218064, -47.81907317907024],
+    //        [-21.13680583292971, -47.8190338831694],
+    //        [-21.13670751387093, -47.81895568044809],
+    //        [-21.13657386948581, -47.81886449064898],
+    //        [-21.13648680581473, -47.81878607738318],
+    //        [-21.13643796224548, -47.81874200534753],
+    //        [-21.13639714838901, -47.81869531017232],
+    //        [-21.13629939588164, -47.81877707012178]
+    //    ];
+
+    //// Cria o objeto de configuração da Linha
+    //var Options = { color: '#004647' };
+
+    //// Grava no Mapa a Linha
+    //L.polyline(latlngs, Options).addTo(map);
 }
 

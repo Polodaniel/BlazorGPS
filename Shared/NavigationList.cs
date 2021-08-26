@@ -14,13 +14,21 @@ namespace BlazorGPS.Shared
 
         }
 
+        public NavigationList(double Latitude, double Longitude, double? Altitude, double Accuracy)
+        {
+            this.Latitude = Latitude;
+            this.Longitude = Longitude;
+            this.Altitude = Altitude;
+            this.Accuracy = Accuracy;
+        }
+
         public int Index { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double? Altitude { get; set; }
         public double Accuracy { get; set; }
 
-        public NavigationList SetValues(int Index,GeolocationCoordinates Coords) 
+        public NavigationList SetValues(int Index, GeolocationCoordinates Coords)
         {
             this.Index = Index;
             this.Latitude = Coords.Latitude;

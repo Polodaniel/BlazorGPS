@@ -2,11 +2,11 @@
 
 @inherits RealTimeBase
 
-<MudTabs Elevation="0" 
-         Rounded="true" 
-         ApplyEffectsToContainer="true" 
+<MudTabs Elevation="0"
+         Rounded="true"
+         ApplyEffectsToContainer="true"
          PanelClass="pt-2"
-         Color="@Color.Tertiary" 
+         Color="@Color.Tertiary"
          Style="background-color: #FFFFFF;"
          @bind-ActivePanelIndex="IndexTab">
     <MudTabPanel Text="GPS">
@@ -25,6 +25,11 @@
                         <MudNavLink Icon="@Icons.Material.Rounded.Stop" OnClick="StopWatch">Parar Navegação</MudNavLink>
                         <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.LayersClear" OnClick="RemoverMarcacoes">Limpar Mapa</MudNavLink>
                         <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Map" OnClick="GetLayout">Layout</MudNavLink>
+                        <MudNavGroup Title="Exemplos" Icon="@Icons.Rounded.Star">
+                            <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Map" OnClick="ExemploNavegacao">Caminho</MudNavLink>
+                            <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Map" OnClick="ExemploNavegacaoAnimado">Animação</MudNavLink>
+                        </MudNavGroup>
+
                     </MudNavMenu>
                 </MudPaper>
             </MudItem>

@@ -11,6 +11,7 @@ namespace BlazorGPS.Client.Extensions
         public static List<LayoutList> CreateLayoutList(this List<LayoutList> List)
         {
             List.Add(new LayoutList("http://{s}.tile.osm.org/{z}/{x}/{y}.png", "Default"));
+            List.Add(new LayoutList("https://tile.opentopomap.org/{z}/{x}/{y}.png", "Open Topo Map"));
             List.Add(new LayoutList("https://api.maptiler.com/maps/hybrid/256/{z}/{x}/{y}@2x.jpg?key=OhKLq5wlAdK90y0vDvPY", "Maptiler - Satellite Hybrid"));
             List.Add(new LayoutList("https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=3b495e9cd83e42f18f72300d39d88d8c", "Thunderforest - OpenCycleMap"));
             List.Add(new LayoutList("https://tile.thunderforest.com/transport/{z}/{x}/{y}.png?apikey=3b495e9cd83e42f18f72300d39d88d8c", "Thunderforest - Transport"));
