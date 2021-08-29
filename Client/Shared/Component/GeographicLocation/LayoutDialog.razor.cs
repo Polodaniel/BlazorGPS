@@ -35,11 +35,8 @@ namespace BlazorGPS.Client.Shared.Component.GeographicLocation
         protected void Cancel() =>
             MudDialog.Cancel();
 
-        protected void Submit()
-        {
-            Console.WriteLine(TypeMapsDialog);
+        protected void Submit() =>
             MudDialog.Close(DialogResult.Ok(TypeMapsDialog));
-        }
         #endregion
     }
 }

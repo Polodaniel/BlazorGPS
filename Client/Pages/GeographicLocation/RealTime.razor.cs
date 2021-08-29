@@ -39,6 +39,7 @@ namespace BlazorGPS.Client.Pages.GeographicLocation
         public int Index { get; set; }
         public int IndexTab { get; set; }
         #endregion
+
         #region Bool
         public bool DisabledButtons { get; set; }
         #endregion
@@ -142,11 +143,6 @@ namespace BlazorGPS.Client.Pages.GeographicLocation
             {
                 positioHistory.PointNavigationList.Add(new NavigationList().SetValues(Index++, p.Location.Coords));
 
-                //await Marker(p.Location.Coords.Latitude,
-                //             p.Location.Coords.Longitude,
-                //             p.Location.Coords.Altitude,
-                //             p.Location.Coords.Accuracy);
-
                 StateHasChanged();
             });
         }
@@ -163,10 +159,10 @@ namespace BlazorGPS.Client.Pages.GeographicLocation
             }
         }
 
-        public async Task Marker(double latitude, double longitude, double? altitude, double accuracy) =>
+        protected async Task Marker(double latitude, double longitude, double? altitude, double accuracy) =>
             await JS.InvokeVoidAsync("Marker", latitude, longitude, altitude, accuracy);
 
-        public async void ViewMapPoint(NavigationList point)
+        protected async void ViewMapPoint(NavigationList point)
         {
             IndexTab = 0;
             StateHasChanged();
@@ -179,16 +175,19 @@ namespace BlazorGPS.Client.Pages.GeographicLocation
         public async ValueTask DisposeAsync() =>
             await StopWatch();
 
-        public async Task RemoverMarcacoes()
+        protected async Task DeleterMarker()
         {
             await JS.InvokeVoidAsync("RemoverMarcacaoMapa");
-
-            positioHistory = new Navigation();
-
             Index = 0;
         }
 
-        public async void SetLayout() =>
+        protected void ClearDateNavegation() 
+        {
+            positioHistory = new Navigation();
+            StateHasChanged();
+        }
+
+        protected async void SetLayout() =>
             await JS.InvokeVoidAsync("Reset", Attribution, MinZoom, MaxZoom, TypeMaps);
 
         protected async void GetLayout()
@@ -212,6 +211,23 @@ namespace BlazorGPS.Client.Pages.GeographicLocation
             }
 
             StateHasChanged();
+        }
+
+        protected async void ViewNavigation() 
+        {
+            if (!Equals(positioHistory, null))
+            {
+                if (!Equals(positioHistory.PointNavigationList, null) && positioHistory.PointNavigationList.Count() > 0)
+                {
+                    await JS.InvokeVoidAsync("NavigationLineMotion", positioHistory.StartingPoint,
+                                                                     positioHistory.PointNavigationList,
+                                                                     positioHistory.EndPoint);
+                }
+                else
+                    Snackbar.Add("Ops! Não existe um historico de navegação !", Severity.Error);
+            }
+            else
+                Snackbar.Add("Ops! Não existe um historico de navegação !", Severity.Error);
         }
 
         protected async void ExemploNavegacao()

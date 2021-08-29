@@ -20,16 +20,19 @@
                         <MudText Typo="Typo.h6" Class="px-4">Menu</MudText>
                         <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Menu de GeoLocalização</MudText>
                         <MudDivider Class="my-2" />
+                        <MudNavGroup Title="Navegação" Icon="@Icons.Rounded.Star">
+                            <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Navigation" OnClick="WatchPosition">Iníciar Navegação</MudNavLink>
+                            <MudNavLink Icon="@Icons.Material.Rounded.Stop" OnClick="StopWatch">Parar Navegação</MudNavLink>
+                            <MudNavLink Disabled="@(!(positioHistory.PointNavigationList.Count() > 0))" Icon="@Icons.Material.Rounded.Navigation" OnClick="ViewNavigation">Visualizar Navegação</MudNavLink>
+                            <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.LayersClear" OnClick="ClearDateNavegation">Limpar Navegação</MudNavLink>
+                        </MudNavGroup>
                         <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.LocationOn" OnClick="GetGeolocation">Localização</MudNavLink>
-                        <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Navigation" OnClick="WatchPosition">Navegação</MudNavLink>
-                        <MudNavLink Icon="@Icons.Material.Rounded.Stop" OnClick="StopWatch">Parar Navegação</MudNavLink>
-                        <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.LayersClear" OnClick="RemoverMarcacoes">Limpar Mapa</MudNavLink>
+                        <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.LayersClear" OnClick="DeleterMarker">Limpar Mapa</MudNavLink>
                         <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Map" OnClick="GetLayout">Layout</MudNavLink>
                         <MudNavGroup Title="Exemplos" Icon="@Icons.Rounded.Star">
                             <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Map" OnClick="ExemploNavegacao">Caminho</MudNavLink>
                             <MudNavLink Disabled="@DisabledButtons" Icon="@Icons.Material.Rounded.Map" OnClick="ExemploNavegacaoAnimado">Animação</MudNavLink>
                         </MudNavGroup>
-
                     </MudNavMenu>
                 </MudPaper>
             </MudItem>
